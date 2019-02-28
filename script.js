@@ -103,7 +103,8 @@ var UIController = (function() {
 		adminOptionsContainer: document.querySelector(".admin-options-container"),
 		insertedQuestionsWrapper: document.querySelector(".inserted-questions-wrapper"),
 		questUpdateBtn: document.getElementById("question-update-btn"),
-		questDeleteBtn: document.getElementById("question-delete-btn")
+		questDeleteBtn: document.getElementById("question-delete-btn"),
+        questsClearBtn: document.getElementById("questions-clear-btn")
 	};
 
 	return {
@@ -170,8 +171,55 @@ var UIController = (function() {
 		        domItems.questUpdateBtn.style.visibility = 'visible';
 		        domItems.questDeleteBtn.style.visibility = 'visible';
 		        domItems.questInsertBtn.style.visibility = 'hidden';
+                domItems.questsClearBtn.style.pointerEvents = 'none';
 		        
 		        addInpsDynFn();
+                
+                var updateQuestion = function() {
+                    var newOptions, optionEls;
+                    newOptions = [];
+                    optionEls = document.querySelectorAll(".admin-option");
+                    foundItem.questionText = domItem.newQuestionsText.value;
+                    
+                    foundItem.correctAnser = '';
+                    
+                    for(var i = 0; i < optionEls.length; i++) {
+                        if(optionEls[i].value !++ '') {
+                            newOptions.push(optionEls[i].value);
+                            if(optionEls[i].previousElementSibling.checked) {
+                                foundItem.correctAnser = optionEls[i].value;
+                            }
+                        }
+                    }
+                    foundItem.options = newOptions;
+                    
+                    if(foundItem.questiontext !== '') {
+                        if(foundItem.options.length > 1) {
+                            if(foundItem.correctAnswer !== '') {
+                    getStorageQuestList.splice(placeInArr, 1, foundItem);
+                    storageQuestList.setQuestionCollection(getStorageQuestList);
+                    domItems.newQuestionsText.value = '';
+                    for(var i = 0; i < options.length; i++) {
+                        optionEls[i].value = '';
+                        optionEls[i].previousElementSibling.checked = false;
+                    }
+                    
+                    domItems.questUpdateBtn.style.visibility = 'hidden';
+                    domItems.questDeleteBtn.style.visibility = 'hidden';
+                    domItems.questInsertBtn.style.visibility = 'visible';
+                    domItems.questsClearBtn.style.pointerEvents = '';
+                            } else {
+                                alert('You missed to check correct answer, or you checked answer without value');
+                            }
+                        } else {
+                            alert('You must insert at least two options');
+                        }
+                    } else {
+                        alert('Please, Insert Question');
+                    }
+                }
+                
+                domItems.questUpdateBtn.onclick = updateQuestion;
 		    }
 		    
 		}
