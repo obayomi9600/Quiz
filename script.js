@@ -143,7 +143,7 @@ var UIController = (function() {
 		},
 		
 		// Edit questions event
-		editQuestList: function(event, storageQuestList, addInpsDynFn) {
+		editQuestList: function(event, storageQuestList, addInpsDynFn, updateQuestListFn) {
 		    var getId, getStorageQuestList, foundItem, placeInArr, optionHTML;
 		    
 		    if('question-'.indexOf(event.target.id)) {
@@ -208,6 +208,8 @@ var UIController = (function() {
                     domItems.questDeleteBtn.style.visibility = 'hidden';
                     domItems.questInsertBtn.style.visibility = 'visible';
                     domItems.questsClearBtn.style.pointerEvents = '';
+                                
+                    updateQuestListFn(storageQuestList);
                             } else {
                                 alert('You missed to check correct answer, or you checked answer without value');
                             }
@@ -251,7 +253,7 @@ var controller = (function(quizCtrl, UICtrl) {
 	});
 	
 selectedDomItems.insertedQuestionsWrapper.addEventListener('click', function() {
-    UICtrl.editQuestList(e, quizCtrl.getQuestionLocalStorage, UICtrl.addInputsDynamically);
+    UICtrl.editQuestList(e, quizCtrl.getQuestionLocalStorage, UICtrl.addInputsDynamically, UICtrl.createQuestionList);
 });
 
 })(quizController, UIController); // End of controller
