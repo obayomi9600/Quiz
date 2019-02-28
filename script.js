@@ -184,7 +184,7 @@ var UIController = (function() {
                     foundItem.correctAnser = '';
                     
                     for(var i = 0; i < optionEls.length; i++) {
-                        if(optionEls[i].value !++ '') {
+                        if(optionEls[i].value !== '') {
                             newOptions.push(optionEls[i].value);
                             if(optionEls[i].previousElementSibling.checked) {
                                 foundItem.correctAnser = optionEls[i].value;
