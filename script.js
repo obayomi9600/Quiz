@@ -238,6 +238,17 @@ var UIController = (function() {
 				domItems.questDeleteBtn.onclick = deleteQuestion;
 			}
 
+		},
+		clearQuestList: function(storageQuestList) {
+			if(storageQuestList.getQuestionCollection() !== null) {
+				if(storageQuestList.getQuestionCollection().length > 0) {
+					var conf = confirm('Warning! You will lose entire question list');
+					if(conf) {
+						storageQuestList.removeQuestionCollection();
+						domItems.insertedQuestionsWrapper.innerHTML = "";
+					}
+				}
+			}
 		}
 	};
 
@@ -268,6 +279,10 @@ var controller = (function(quizCtrl, UICtrl) {
 
 	selectedDomItems.insertedQuestionsWrapper.addEventListener('click', function() {
 		UICtrl.editQuestList(e, quizCtrl.getQuestionLocalStorage, UICtrl.addInputsDynamically, UICtrl.createQuestionList);
+	});
+
+	selectedDomItems.questsClearBtn.addEventListener('click', function() {
+		UICtrl.clearQuestList(quizCtrl.getQuestionLocalStorage);
 	});
 
 })(quizController, UIController); // End of controller
