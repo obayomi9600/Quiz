@@ -92,6 +92,14 @@ var quizController = (function() {
 				alert('Please, Insert Question');
 				return false;
 			}
+		},
+
+		checkAnswer: function(ans) {
+			if (questionLocalStorage.getQuestionCollection()[quizProgress.questionIndex].correctAnswer === ans.textContent) {
+				return true;
+			} else {
+				return false;
+			}
 		}
 	};
 
@@ -277,11 +285,11 @@ var UIController = (function() {
 				}
 			}
 		},
-		
+
 		displayProgress: function(storageQuestList, progress) {
-		    domItems.progressBar.max = storageQuestList.getQuestionCollection().length;
-		    domItems.progressBar.value = progress.questionIndex + 1;
-		    domItems.progressBar.textContent = (progress.questionIndex + 1) + '/' + storageQuestList.getQuestionCollection().length;
+			domItems.progressBar.max = storageQuestList.getQuestionCollection().length;
+			domItems.progressBar.value = progress.questionIndex + 1;
+			domItems.progressBar.textContent = (progress.questionIndex + 1) + '/' + storageQuestList.getQuestionCollection().length;
 		}
 	};
 
@@ -319,7 +327,21 @@ var controller = (function(quizCtrl, UICtrl) {
 	});
 
 	UICtrl.displayQuestion(quizCtrl.getQuestionLocalStorage, quizCtrl.getQuizProgress);
-	
+
 	UICtrl.displayProgress(quizCtrl.getQuestionLocalStorage, quizCtrl.getQuizProgress);
+
+	selectedDomItems.quizOptionsWrapper.addEventListener('click', function(e) {
+		var updatedOptionsDiv = selectedDomItems.quizOptionsWrapper.querySelectorAll('div');
+
+		for (var i = 0; i < updatedOptionsDiv.length; i++) {
+
+			if (e.target.className === 'choice-' + i) {
+
+				var answer = document.querySelector('.quiz-options-wrapper div p.' + e.target.className);
+
+				quizCtrl.checkAnswer(answer);
+			}
+		}
+	});
 
 })(quizController, UIController); // End of controller
