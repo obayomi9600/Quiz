@@ -217,7 +217,7 @@ var UIController = (function() {
 					var newOptions, optionEls;
 					newOptions = [];
 					optionEls = document.querySelectorAll(".admin-option");
-					foundItem.questionText = domItem.newQuestionsText.value;
+					foundItem.questionText = domItems.newQuestionsText.value;
 
 					foundItem.correctAnser = '';
 
