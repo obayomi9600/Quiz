@@ -100,6 +100,10 @@ var quizController = (function() {
 			} else {
 				return false;
 			}
+		},
+		
+		isFinished: function() {
+		    return quizProgress.questionIndex + 1 === questionLocalStorage.getQuestionCollection().length;
 		}
 	};
 
@@ -123,7 +127,12 @@ var UIController = (function() {
 		askedQuestText: document.getElementById("asked-question-text"),
 		quizOptionsWrapper: document.querySelector(".quiz-options-wrapper"),
 		progressBar: document.querySelector("progress"),
-		progressPar: document.getElementById("progress")
+		progressPar: document.getElementById("progress"),
+		instAnsContainer: document.querySelector(."instant-answer-container"),
+		instAnsText: document.getElementById("instant-answer-text"),
+		instAnsDiv: document.getElmentById("instant-answer-wrapper"),
+		emotionIcon: document.getElementById("emotion"),
+		nextQuestBtn: document.getElementById("next-question-btn")
 	};
 
 	return {
@@ -290,6 +299,35 @@ var UIController = (function() {
 			domItems.progressBar.max = storageQuestList.getQuestionCollection().length;
 			domItems.progressBar.value = progress.questionIndex + 1;
 			domItems.progressBar.textContent = (progress.questionIndex + 1) + '/' + storageQuestList.getQuestionCollection().length;
+		},
+		
+		newDesign: function(ansResult, selectedAnswer) {
+		    var twoOptions index;
+		    
+		    index = 0;
+		    
+		    if(ansResult) {
+		        index = 1;
+		    }
+		    
+		    twoOptions = {
+		      instAnswerText: ['This is a wrong anser', 'This is a correct answer'],
+		      instAnswerClass: ['red', 'green'],
+		      emotionType: ['images/sad.png', 'images/happy.png'],
+		      optionSpanBg: ['rgba(200, 0, 0 .7', 'rgba(0, 250, 0, .2']
+		    };
+		    domItems.quizOptionsWrapper.style.cssText = "opacity: 0.6; pointer-events: none;";
+		    domItems.instAnsContainer.style.opacity = "1";
+		    domItems.instAnsText.textContent = twoOptions.anstAnserText[index];
+		    domItems.instAnsDiv.className = twoOptions.instAnswerClass[index];
+		    domItems.emotionIcon.setAttribute('src', twoOptions.emotionType[index]);
+		    
+		    selectedAnswer.previousElementSibling.style.backgroundCOlor = twoOptions.optionSpanBg[index];
+		},
+		
+		resetDesign: function() {
+		    domItems.quizOptionsWrapper.style.cssText = "";
+		    domItems.instAnsContainer.style.opacity = "0";
 		}
 	};
 
@@ -339,7 +377,32 @@ var controller = (function(quizCtrl, UICtrl) {
 
 				var answer = document.querySelector('.quiz-options-wrapper div p.' + e.target.className);
 
-				quizCtrl.checkAnswer(answer);
+				var aswerResult = quizCtrl.checkAnswer(answer);
+				
+				UICtrl.newDesign(aswerResult, answer);
+				
+				if(quizCtrl.isFinished()) {
+				    // Finish Quiz
+				    selectedDomItems.nextQuestBtn.textContent = 'Finish';
+				}
+				
+				var nextQuestion = function(questData, progress) {
+				    if(quizCtrl.isFInished()) {
+				        // Finish Quiz
+				    } else {
+				        UICtrl.resetDesign();
+				        // Move to next question
+				        quizCtrl.getQuizProgress.questionIndex++;
+				        // Display next question
+				        UICtrl.displayQuestion(quizCtrl.getQuestionLocalStorage, quizCtrl.getQuizProgress);
+				        // Update progress bar
+				        UICtrl.displayProgress(quizCtrl.getQuestionLocalStorage, quizCtrl.getQuizProgress);
+				    }
+				}
+				
+				selectedDomItems.nextQuestBtn.onclick = function() {
+				    nextQuestion(quizCtrl.getQuestionLocalStorage, quizCtrl.getQuizProgress);
+				}
 			}
 		}
 	});
