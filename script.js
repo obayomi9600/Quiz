@@ -29,6 +29,34 @@ var quizController = (function() {
 
 	var quizProgress = {
 		questionIndex: 0
+	};
+	
+	// ------PERSON CONSTRUCTOR--------
+	function Person(id, firstname, lastname, score) {
+	    this.id = id;
+	    this.firstname = firstname;
+	    this.lastname = lastname;
+	    this.score = score;
+	}
+	var currentPersonData = {
+	    fullname: ['Martins', 'Obayomi'],
+	    score: 0
+	};
+	
+	var personLocalStorage = {
+	    setPersonData: function(newPersonData) {
+	        localStorage.setItem('personData', JSON.stringify(newPersonData));
+	    },
+	    getPersonData: function() {
+	        return JSON.parse(localStorage.getItem('personData'));
+	    },
+	    removePersonData: function() {
+	        localStorage.removeItem('personData');
+	    }
+	}
+	
+	if(personLocalStorage.getPersonData() === null) {
+	    personLocalStorage.setPersonData([]);
 	}
 
 	return {
@@ -104,6 +132,21 @@ var quizController = (function() {
 		
 		isFinished: function() {
 		    return quizProgress.questionIndex + 1 === questionLocalStorage.getQuestionCollection().length;
+		},
+		
+		addPerson: function() {
+		    var newPerson, personId personData;
+		    
+		    if(personLocalStorage.getpersonData().length > 0) {
+		        personId = personLocalStorage.getPersonData()[personLocalStorage.getPersonData().length - 1].id + 1;
+		    } else {
+		        personId = 0;
+		    }
+		    
+		    newPerson = new Person(personId, currentPersonData.fullname[0],currentPersonData.fullname[1],currentPersonData.score);
+		    personData = personLocalStorage.getPersonData();
+		    personData.push(newPerson);
+		    personLocalStorage.setPersonData(personData);
 		}
 	};
 
@@ -389,6 +432,7 @@ var controller = (function(quizCtrl, UICtrl) {
 				var nextQuestion = function(questData, progress) {
 				    if(quizCtrl.isFInished()) {
 				        // Finish Quiz
+				        quizCtrl.addPerson();
 				    } else {
 				        UICtrl.resetDesign();
 				        // Move to next question
