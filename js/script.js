@@ -126,7 +126,7 @@ var quizController = (function() {
 
 		checkAnswer: function(ans) {
 			if (questionLocalStorage.getQuestionCollection()[quizProgress.questionIndex].correctAnswer === ans.textContent) {
-			    currPersonData.score++;
+				currPersonData.score++;
 				return true;
 			} else {
 				return false;
@@ -396,30 +396,30 @@ var UIController = (function() {
 			if (domItems.firstnameINput.value !== "" && domItems.lastNameInput.value !== "") {
 
 				if (!(domItems.firstNameInput.value === admin[0] && donItems.lastNameInput.value === admin[1])) {
-    				    if(storageQuestList.getQuestionCollection().length > 0) {
-    					currPerson.fullname.push(domItems.firstNameInput.value);
-    					currPerson.fullname.push(domItems.lastNameInput.value);
-    
-    					domItems.landingPageSection.style.display = "none";
-    					domItems.quizSection.style.display = "block";
-				    } else {
-				        alert("Quiz is not ready, please contact administrator");
-				    }
+					if (storageQuestList.getQuestionCollection().length > 0) {
+						currPerson.fullname.push(domItems.firstNameInput.value);
+						currPerson.fullname.push(domItems.lastNameInput.value);
+
+						domItems.landingPageSection.style.display = "none";
+						domItems.quizSection.style.display = "block";
+					} else {
+						alert("Quiz is not ready, please contact administrator");
+					}
 
 				} else {
 					domItems.landingPageSection.style.display = "none";
 					domItems.adminPanelSection.style.display = "block";
 				}
 			} else {
-			    alert("Please, enter your firstname and lastname");
+				alert("Please, enter your firstname and lastname");
 			}
 
 		},
-		
+
 		finalResult: function(currPerson) {
-		    domItems.finalScoreText.textContent = currPerson.fullname[0] + ' ' + currPerson.fullname[1] + ', your final score is ' + currPerson.score;
-		    domItems.quizSection.style.display = "none";
-		    domItems.finalResultSection.style.display = "block"
+			domItems.finalScoreText.textContent = currPerson.fullname[0] + ' ' + currPerson.fullname[1] + ', your final score is ' + currPerson.score;
+			domItems.quizSection.style.display = "none";
+			domItems.finalResultSection.style.display = "block";
 		}
 	};
 
@@ -482,9 +482,9 @@ var controller = (function(quizCtrl, UICtrl) {
 					if (quizCtrl.isFInished()) {
 						// Finish Quiz
 						quizCtrl.addPerson();
-						
+
 						UICtrl.finalResult(quizCtrl.getCurrPersonData)
-						
+
 					} else {
 						UICtrl.resetDesign();
 						// Move to next question
@@ -506,13 +506,13 @@ var controller = (function(quizCtrl, UICtrl) {
 	selectedDomIems.startQuizBtn.addEventListener('click', function() {
 		UICtrl.getFullName(quizCtrl.getCurrPersonData, quizCtrl.getQuestionLocalStorage, quizCtrl.getAdminFUllName);
 	});
-	
+
 	selectedDomItems.lastNameInout.addEventListener('focus', function() {
-	    selectedDomItems.lastNameInput.addEventListener('keypress', function(e) {
-	        if(e.keyCode === 13) {
-	            UICtrl.getFullName(quizCtrl.getCurrPersonData, quizCtrl.getQuestionLocalStorage, quizCtrl.getAdminFUllName);
-	        }
-	    });
+		selectedDomItems.lastNameInput.addEventListener('keypress', function(e) {
+			if (e.keyCode === 13) {
+				UICtrl.getFullName(quizCtrl.getCurrPersonData, quizCtrl.getQuestionLocalStorage, quizCtrl.getAdminFUllName);
+			}
+		});
 	});
 
 })(quizController, UIController); // End of controller
