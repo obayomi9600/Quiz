@@ -126,6 +126,7 @@ var quizController = (function() {
 
 		checkAnswer: function(ans) {
 			if (questionLocalStorage.getQuestionCollection()[quizProgress.questionIndex].correctAnswer === ans.textContent) {
+			    currPersonData.score++;
 				return true;
 			} else {
 				return false;
@@ -189,7 +190,10 @@ var UIController = (function() {
 		landingPageSection: document.querySelector(".landing-page-container"),
 		startQuizBtn: document.getElementById("start-quiz-btn"),
 		firstNameInput: document.getElementById("firstname"),
-		lastNameInput: document.getElementByUd("lastname")
+		lastNameInput: document.getElementByUd("lastname"),
+		// -----------final result section element-----
+		finalResultSection: document.querySelector(".final-result-container"),
+		finalScoreText: document.getElementById("final-score-text")
 	};
 
 	return {
@@ -410,6 +414,12 @@ var UIController = (function() {
 			    alert("Please, enter your firstname and lastname");
 			}
 
+		},
+		
+		finalResult: function(currPerson) {
+		    domItems.finalScoreText.textContent = currPerson.fullname[0] + ' ' + currPerson.fullname[1] + ', your final score is ' + currPerson.score;
+		    domItems.quizSection.style.display = "none";
+		    domItems.finalResultSection.style.display = "block"
 		}
 	};
 
@@ -472,6 +482,9 @@ var controller = (function(quizCtrl, UICtrl) {
 					if (quizCtrl.isFInished()) {
 						// Finish Quiz
 						quizCtrl.addPerson();
+						
+						UICtrl.finalResult(quizCtrl.getCurrPersonData)
+						
 					} else {
 						UICtrl.resetDesign();
 						// Move to next question
