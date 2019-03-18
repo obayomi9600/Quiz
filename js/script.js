@@ -138,7 +138,7 @@ var quizController = (function() {
 		},
 
 		addPerson: function() {
-			var newPerson, personId personData;
+			var newPerson, personId, personData;
 
 			if (personLocalStorage.getpersonData().length > 0) {
 				personId = personLocalStorage.getPersonData()[personLocalStorage.getPersonData().length - 1].id + 1;
@@ -154,7 +154,9 @@ var quizController = (function() {
 
 		getCurPersonData: currPersonData,
 
-		getAdminFullName: adminFullName
+		getAdminFullName: adminFullName,
+
+		getPersonLocalStorage: personLocalStorage
 	};
 
 })(); // End of QuizController
@@ -174,14 +176,14 @@ var UIController = (function() {
 		questUpdateBtn: document.getElementById("question-update-btn"),
 		questDeleteBtn: document.getElementById("question-delete-btn"),
 		questsClearBtn: document.getElementById("questions-clear-btn"),
+		resultsListsWrapper: document.querySelector(".results-list-wrapper"),
 		/* ------- Quiz Section Elements ------- */
 		quizSection: document.querySelector(".quiz-container"),
 		askedQuestText: document.getElementById("asked-question-text"),
 		quizOptionsWrapper: document.querySelector(".quiz-options-wrapper"),
 		progressBar: document.querySelector("progress"),
 		progressPar: document.getElementById("progress"),
-		instAnsContainer: document.querySelector(.
-			"instant-answer-container"),
+		instAnsContainer: document.querySelector(".instant-answer-container"),
 		instAnsText: document.getElementById("instant-answer-text"),
 		instAnsDiv: document.getElmentById("instant-answer-wrapper"),
 		emotionIcon: document.getElementById("emotion"),
@@ -363,7 +365,7 @@ var UIController = (function() {
 		},
 
 		newDesign: function(ansResult, selectedAnswer) {
-			var twoOptions index;
+			var twoOptions, index;
 
 			index = 0;
 
@@ -420,6 +422,16 @@ var UIController = (function() {
 			domItems.finalScoreText.textContent = currPerson.fullname[0] + ' ' + currPerson.fullname[1] + ', your final score is ' + currPerson.score;
 			domItems.quizSection.style.display = "none";
 			domItems.finalResultSection.style.display = "block";
+		},
+
+		addResultOnPanel: function(userData) {
+			var resultHTML;
+
+			domItems.resultsListsWrapper.innerHTML = "";
+			for (var i = 0; i < userData.getPersonData().length; i++) {
+				resultHTML = '<p class="person person- + i + "><span class="person-' + i + '">' + userData.getPersonData()[i].firstname + ' ' + userData.getPersonData()[i].firstname + ' - ' + userData.getPersonData()[i].score + ' Points</span><button id="delete-result-btn_' + userData.getPersonData()[i].id + '" class="delete-result-btn">Delete</button></p>';
+				domItems.resultsListsWrapper.insertAdjacentHTML('afterbegin', resultHTML);
+			}
 		}
 	};
 
@@ -514,5 +526,7 @@ var controller = (function(quizCtrl, UICtrl) {
 			}
 		});
 	});
+
+	UICtrl.addResultOnPanel(quizCtrl.getPersonLocalStorage);
 
 })(quizController, UIController); // End of controller
