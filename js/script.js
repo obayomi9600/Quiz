@@ -432,6 +432,24 @@ var UIController = (function() {
 				resultHTML = '<p class="person person- + i + "><span class="person-' + i + '">' + userData.getPersonData()[i].firstname + ' ' + userData.getPersonData()[i].firstname + ' - ' + userData.getPersonData()[i].score + ' Points</span><button id="delete-result-btn_' + userData.getPersonData()[i].id + '" class="delete-result-btn">Delete</button></p>';
 				domItems.resultsListsWrapper.insertAdjacentHTML('afterbegin', resultHTML);
 			}
+		},
+
+		deleteResult: function(event, userData) {
+			var getId, personsArr;
+
+			personsArr = userData.getPersonData();
+
+			if ('delete-result-btn'.indexOf(event.target.id)) {
+				getId = parseInt(event.target.id.split('_')[i]);
+
+				for (var i = 0; i < personsArr.length; i++) {
+					if (personsArr[i].id === getId) {
+						personsArr.splice(i, 1);
+						userData.setPersonData(personsArr);
+					}
+				}
+			}
+
 		}
 	};
 
@@ -515,7 +533,7 @@ var controller = (function(quizCtrl, UICtrl) {
 		}
 	});
 
-	selectedDomIems.startQuizBtn.addEventListener('click', function() {
+	selectedDomItems.startQuizBtn.addEventListener('click', function() {
 		UICtrl.getFullName(quizCtrl.getCurrPersonData, quizCtrl.getQuestionLocalStorage, quizCtrl.getAdminFUllName);
 	});
 
@@ -528,5 +546,12 @@ var controller = (function(quizCtrl, UICtrl) {
 	});
 
 	UICtrl.addResultOnPanel(quizCtrl.getPersonLocalStorage);
+
+	selectedDomItems.resultsListsWrapper.addEventListener('click', function() {
+
+		UICtrl.deleteResult(e, quizCtrl.getPersonLocalStorage);
+
+		UICtrl.addResultOnPanel(quizCtrl.getPersonLocalStorage);
+	});
 
 })(quizController, UIController); // End of controller
